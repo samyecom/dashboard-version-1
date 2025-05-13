@@ -47,6 +47,11 @@ const navItems: NavItem[] = [
     name: "Products",
     path: "/products",
   },
+  {
+    icon: <BoxCubeIcon />,
+    name: "Chat",
+    path: "/chatbot",
+  },
 
   {
     name: "Forms",
