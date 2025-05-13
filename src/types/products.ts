@@ -107,13 +107,13 @@ export const getProductById = async (id: string): Promise<Product | null> => {
     return mockProducts.find(p => p.id === id) || null;
 };
 
-const updateProduct = async (productData: Product): Promise<Product> => {
-    console.log("Updating product:", productData);
+// const updateProduct = async (productData: Product): Promise<Product> => {
+//     console.log("Updating product:", productData);
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+//     await new Promise(resolve => setTimeout(resolve, 500));
 
-    return productData;
-};
+//     return productData;
+// };
 
 export type NewProductFormData = Omit<Product, 'id' | 'rating'> & {
 

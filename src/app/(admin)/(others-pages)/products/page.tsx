@@ -10,7 +10,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import Badge from "@/components/ui/badge/Badge";
-import { Product, mockProducts } from "@/types/products";
+import { mockProducts } from "@/types/products";
 import Link from "next/link";
 export const metadata: Metadata = {
     title: "Next.js Products | TailAdmin - Next.js Dashboard Template",
