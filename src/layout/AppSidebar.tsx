@@ -7,6 +7,7 @@ import { useSidebar } from "../context/SidebarContext";
 import {
   BoxCubeIcon,
   CalenderIcon,
+  ChatIcon,
   ChevronDownIcon,
   GridIcon,
   // HorizontaLDots,
@@ -33,14 +34,9 @@ const navItems: NavItem[] = [
     path:'/'
   },
   {
-    icon: <CalenderIcon />,
-    name: "Calendar",
-    path: "/calendar",
-  },
-  {
-    icon: <UserCircleIcon />,
-    name: "User Profile",
-    path: "/profile",
+    icon: <PlugInIcon />,
+    name: "Orders",
+    path: "/orders",
   },
   {
     icon: <BoxCubeIcon />,
@@ -48,29 +44,25 @@ const navItems: NavItem[] = [
     path: "/products",
   },
   {
-    icon: <BoxCubeIcon />,
+    icon: <ChatIcon />,
     name: "Chat",
     path: "/chatbot",
   },
-
   {
-    name: "Forms",
-    icon: <ListIcon />,
-    subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
+    icon: <UserCircleIcon />,
+    name: "User Profile",
+    path: "/profile",
   },
-  {
-    name: "Tables",
-    icon: <TableIcon />,
-    subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
-  },
-  {
-    name: "Pages",
-    icon: <PageIcon />,
-    subItems: [
-      { name: "Blank Page", path: "/blank", new: true },
-      { name: "404 Error", path: "/error-404", pro: false },
-    ],
-  },
+  // {
+  //   name: "Others",
+  //   icon: <PageIcon />,
+  //   subItems: [
+  //     { name: "Blank Page", path: "/blank", new: true },
+  //     { name: "Calendar", path: "/calendar", pro: false },
+  //     { name: "Forms", path: "/form-elements", pro: false },
+  //     { name: "Basic Tables", path: "/basic-tables", pro: false },
+  //   ],
+  // },
 ];
 
 const othersItems: NavItem[] = [
