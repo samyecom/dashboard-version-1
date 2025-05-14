@@ -80,8 +80,12 @@ interface EditOrderPageProps {
 
 export default function EditOrderPage({ params: paramsProp }: EditOrderPageProps) {
   let resolvedParams: PageParams;
-  if (typeof (paramsProp as any)?.then === 'function') {
-    resolvedParams = use(paramsProp as Promise<PageParams>);
+  function isPromise<T>(value: unknown): value is Promise<T> {
+    return typeof (value as Promise<T>)?.then === 'function';
+  }
+  
+  if (isPromise<PageParams>(paramsProp)) {
+    resolvedParams = use(paramsProp);
   } else {
     resolvedParams = paramsProp as PageParams;
   }
