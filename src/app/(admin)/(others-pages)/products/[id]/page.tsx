@@ -39,7 +39,7 @@ interface SingleProductPageProps {
 
 export default function SingleProductPage({ params: paramsProp }: SingleProductPageProps) {
   
-  let resolvedParams: PageParams;
+  let resolvedParams: PageParams | undefined;
 
   // Check if paramsProp is a Promise (duck typing)
   // The `use` hook should only be called with a Promise or Context.
@@ -50,7 +50,7 @@ export default function SingleProductPage({ params: paramsProp }: SingleProductP
   if (isPromise<PageParams>(paramsProp)) {
     resolvedParams = use(paramsProp);
   } else {
-    resolvedParams = paramsProp as PageParams;
+    resolvedParams = undefined;
   }
   
   
