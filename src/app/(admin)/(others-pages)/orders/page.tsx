@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table"; 
 import Badge from "@/components/ui/badge/Badge"; 
-import { Order, OrderStatus , mockOrderData} from "@/types/order"; 
+import { OrderStatus , mockOrderData} from "@/types/order"; 
 import Link from "next/link";
 
 

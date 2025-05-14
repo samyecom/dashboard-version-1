@@ -43,11 +43,16 @@ export default function SingleProductPage({ params: paramsProp }: SingleProductP
 
   // Check if paramsProp is a Promise (duck typing)
   // The `use` hook should only be called with a Promise or Context.
-  if (typeof (paramsProp as any)?.then === 'function') {
-    resolvedParams = use(paramsProp as Promise<PageParams>);
+  function isPromise<T>(value: unknown): value is Promise<T> {
+    return typeof (value as Promise<T>)?.then === 'function';
+  }
+  
+  if (isPromise<PageParams>(paramsProp)) {
+    resolvedParams = use(paramsProp);
   } else {
     resolvedParams = paramsProp as PageParams;
   }
+  
   
   const { id } = resolvedParams || {}; // Add a fallback for resolvedParams if it could be undefined
 

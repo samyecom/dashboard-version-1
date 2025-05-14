@@ -2,7 +2,7 @@
 
 import React, { useState, FormEvent, ChangeEvent } from 'react';
 import PageBreadcrumb from '@/components/common/PageBreadCrumb';
-import { NewOrderFormData, Order, CustomerInfo, OrderStatus } from '@/types/order'; // Assuming your types are here
+import { NewOrderFormData, Order } from '@/types/order'; // Assuming your types are here
 
 // Mock function to simulate creating an order (replace with actual API call)
 const createOrderApi = async (data: NewOrderFormData): Promise<Order> => {
@@ -17,7 +17,7 @@ const createOrderApi = async (data: NewOrderFormData): Promise<Order> => {
         name: data.customerName,
         email: data.customerEmail,
         phone: data.customerPhone,
-        avatar: undefined
+        avatar: ''
     },
     orderDate: data.orderDate || new Date().toISOString().split('T')[0], // Default to today if not provided
     itemCount: data.itemCount,

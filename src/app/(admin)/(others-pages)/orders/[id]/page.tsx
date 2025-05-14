@@ -3,7 +3,7 @@
 import React, { useEffect, useState, FormEvent, ChangeEvent, use } from 'react';
 import PageBreadcrumb from '@/components/common/PageBreadCrumb';
 import Badge from "@/components/ui/badge/Badge"; // Adjust path to your Badge component
-import { Order, OrderEditFormData, OrderStatus, CustomerInfo } from '@/types/order';
+import { Order, OrderEditFormData} from '@/types/order';
 
 // --- Mock Data & API Functions (Replace with your actual API calls) ---
 // This mock database will be "updated" by the mock API function.
@@ -12,7 +12,7 @@ const mockOrderDatabase: Order[] = [
     id: "ORD-2024-001",
     customer: {
         id: "CUST-001", name: "Alice Wonderland", email: "alice@example.com",
-        avatar: undefined
+        avatar: ''
     },
     orderDate: "2024-07-28", totalAmount: 150.75, status: "Delivered", itemCount: 3, paymentMethod: "Credit Card", shippingAddress: "123 Main St, Wonderland", notes: "Gift wrap please."
   },
@@ -20,7 +20,7 @@ const mockOrderDatabase: Order[] = [
     id: "ORD-2024-002",
     customer: {
         id: "CUST-002", name: "Bob The Builder", email: "bob@example.com",
-        avatar: undefined
+        avatar: ''
     },
     orderDate: "2024-07-27", totalAmount: 89.99, status: "Shipped", itemCount: 1, paymentMethod: "PayPal", shippingAddress: "456 Fixit Ave, Builderville"
   },
@@ -28,7 +28,7 @@ const mockOrderDatabase: Order[] = [
     id: "ORD-2024-003",
     customer: {
         id: "CUST-003", name: "Charlie Brown", email: "charlie@example.com",
-        avatar: undefined
+        avatar: ''
     },
     orderDate: "2024-07-26", totalAmount: 230.00, status: "Processing", itemCount: 5, paymentMethod: "Stripe", shippingAddress: "789 Good Grief Ln, Peanuts Town"
   },

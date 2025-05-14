@@ -1,5 +1,5 @@
 export interface CustomerInfo {
-  avatar: any;
+  avatar: string;
   id?: string; 
   name: string;
   email?: string;
