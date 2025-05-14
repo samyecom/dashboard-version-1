@@ -34,7 +34,7 @@ interface PageParams {
 }
 
 interface SingleProductPageProps {
-  params: PageParams | Promise<PageParams>; 
+  params: Promise<PageParams> | undefined;
 }
 
 export default function SingleProductPage({ params: paramsProp }: SingleProductPageProps) {
