@@ -193,7 +193,7 @@ export default function EditOrderPage({ params }: EditOrderPageProps) {
   if (loading && !order) { // Initial loading state before order data is available
     return (
       <div>
-        <PageBreadcrumb pageTitle="Loading Order..." />
+        <PageBreadcrumb pageTitle="Loading Order..." createUrl={null} />
         <div className="mt-6 p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg text-center">
           <p>Loading order details, please wait...</p>
         </div>
@@ -204,7 +204,7 @@ export default function EditOrderPage({ params }: EditOrderPageProps) {
   if (error) {
     return (
       <div>
-        <PageBreadcrumb pageTitle="Error" />
+        <PageBreadcrumb pageTitle="Error" createUrl={null} />
         <div className="mt-6 p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg text-red-500 text-center">
           <p>{error}</p>
         </div>
@@ -215,7 +215,7 @@ export default function EditOrderPage({ params }: EditOrderPageProps) {
   if (!order) { // Order not found after attempting to load (and not in initial loading phase)
     return (
       <div>
-        <PageBreadcrumb pageTitle="Order Not Found" />
+        <PageBreadcrumb pageTitle="Order Not Found" createUrl={null} />
         <div className="mt-6 p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg text-center">
           <p>The requested order (ID: {id}) could not be found.</p>
         </div>
@@ -229,7 +229,7 @@ export default function EditOrderPage({ params }: EditOrderPageProps) {
 
   return (
     <>
-      <PageBreadcrumb pageTitle={isEditing ? `Edit Order: #${order.id}` : `Order Details: #${order.id}`} />
+      <PageBreadcrumb pageTitle={isEditing ? `Edit Order: #${order.id}` : `Order Details: #${order.id}`} createUrl={null} />
 
       <div className="mt-6">
         <form onSubmit={handleFormSubmit} className="space-y-8">

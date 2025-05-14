@@ -4,9 +4,7 @@ import React, { useEffect, useState, FormEvent, ChangeEvent, use } from 'react';
 import PageBreadcrumb from '@/components/common/PageBreadCrumb';
 import Image from 'next/image';
 import Badge from "@/components/ui/badge/Badge"; 
-import { Product, ProductFormData, mockProducts } from '@/types/products'; 
-
-
+import { mockProducts, Product, ProductFormData } from '@/types/products';
 
 
 const getProductById = async (id: string): Promise<Product | null> => {
@@ -35,7 +33,7 @@ interface PageParams {
 
 interface SingleProductPageProps {
   params: Promise<PageParams> | undefined;
-}
+} 
 
 export default function SingleProductPage({ params: paramsProp }: SingleProductPageProps) {
   
@@ -74,13 +72,28 @@ export default function SingleProductPage({ params: paramsProp }: SingleProductP
             setProduct(fetchedProduct);
             
             setFormData({
+              sku: fetchedProduct.sku,
+              image: fetchedProduct.image,
               name: fetchedProduct.name,
+              shortName: fetchedProduct.shortName,
+              identifier: fetchedProduct.identifier,
+              productType: fetchedProduct.productType,
+              brand: fetchedProduct.brand,
               category: fetchedProduct.category,
-              price: fetchedProduct.price,
+              quantity: fetchedProduct.quantity,
               stock: fetchedProduct.stock,
+              mrp: fetchedProduct.mrp,
+              price: fetchedProduct.price,
+              businessPrice: fetchedProduct.businessPrice,
+              manufacturer: fetchedProduct.manufacturer,
+              hsnCode: fetchedProduct.hsnCode,
+              ppuCount: fetchedProduct.ppuCount,
+              unit: fetchedProduct.unit,
+              tax: fetchedProduct.tax,
+              manufacturingPartNumber: fetchedProduct.manufacturingPartNumber,
+              gender: fetchedProduct.gender,
               status: fetchedProduct.status,
               description: fetchedProduct.description,
-              image: fetchedProduct.image,
               rating: fetchedProduct.rating,
             });
           } else {
@@ -112,14 +125,29 @@ export default function SingleProductPage({ params: paramsProp }: SingleProductP
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target;
-    let processedValue: string | number = value;
+    let processedValue: string | number | undefined = value; // Allow undefined for optional fields
 
     if (type === 'number') {
-      processedValue = value === '' ? 0 : parseFloat(value);
+      // Convert empty string to undefined for optional number fields, otherwise to float
+      processedValue = value === '' ? undefined : parseFloat(value);
+      // Ensure integer values for specific fields if necessary and not undefined
+      if (processedValue !== undefined && (name === 'stock' || name === 'quantity' || name === 'ppuCount')) {
+          processedValue = parseInt(value, 10) || 0; // Fallback to 0 if parsing fails for integers
+      }
     }
-    if (name === 'rating' && type === 'number') {
-      processedValue = value === '' ? 0 : Math.max(0, Math.min(5, parseFloat(value)));
+
+    // For optional text fields, convert empty string to undefined
+    if (type === 'text' || type === 'textarea') {
+       if (value === '') {
+          processedValue = undefined;
+       }
     }
+
+     // Special handling for rating to ensure it's between 0 and 5 if not undefined
+    if (name === 'rating' && processedValue !== undefined && typeof processedValue === 'number') {
+      processedValue = Math.max(0, Math.min(5, processedValue));
+    }
+
 
     setFormData(prev => ({ ...prev, [name]: processedValue }));
   };
@@ -136,13 +164,28 @@ export default function SingleProductPage({ params: paramsProp }: SingleProductP
         setProduct(updatedProduct);
         
         setFormData({
+            sku: updatedProduct.sku,
+            image: updatedProduct.image,
             name: updatedProduct.name,
+            shortName: updatedProduct.shortName,
+            identifier: updatedProduct.identifier,
+            productType: updatedProduct.productType,
+            brand: updatedProduct.brand,
             category: updatedProduct.category,
-            price: updatedProduct.price,
+            quantity: updatedProduct.quantity,
             stock: updatedProduct.stock,
+            mrp: updatedProduct.mrp,
+            price: updatedProduct.price,
+            businessPrice: updatedProduct.businessPrice,
+            manufacturer: updatedProduct.manufacturer,
+            hsnCode: updatedProduct.hsnCode,
+            ppuCount: updatedProduct.ppuCount,
+            unit: updatedProduct.unit,
+            tax: updatedProduct.tax,
+            manufacturingPartNumber: updatedProduct.manufacturingPartNumber,
+            gender: updatedProduct.gender,
             status: updatedProduct.status,
             description: updatedProduct.description,
-            image: updatedProduct.image,
             rating: updatedProduct.rating,
         });
         setIsEditing(false);
@@ -162,7 +205,7 @@ export default function SingleProductPage({ params: paramsProp }: SingleProductP
   if (loading) {
     return (
       <div>
-        <PageBreadcrumb pageTitle="Loading Product..." />
+        <PageBreadcrumb pageTitle="Loading Product..." createUrl={null} />
         <div className="mt-6 p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg text-center">
           <p>Loading product details, please wait...</p>
         </div>
@@ -173,7 +216,7 @@ export default function SingleProductPage({ params: paramsProp }: SingleProductP
   if (error) {
     return (
       <div>
-        <PageBreadcrumb pageTitle="Error" />
+        <PageBreadcrumb pageTitle="Error" createUrl={null} />
         <div className="mt-6 p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg text-red-500 text-center">
           <p>{error}</p>
         </div>
@@ -184,7 +227,7 @@ export default function SingleProductPage({ params: paramsProp }: SingleProductP
   if (!product) {
     return (
       <div>
-        <PageBreadcrumb pageTitle="Product Not Found" />
+        <PageBreadcrumb pageTitle="Product Not Found" createUrl={null} />
          <div className="mt-6 p-6 bg-white dark:bg-gray-900 rounded-xl shadow-lg text-center">
           <p>The requested product could not be found or the ID is invalid.</p>
         </div>
@@ -197,7 +240,7 @@ export default function SingleProductPage({ params: paramsProp }: SingleProductP
 
   return (
     <div>
-      <PageBreadcrumb pageTitle={isEditing ? `Edit: ${product.name}` : product.name} />
+      <PageBreadcrumb pageTitle={isEditing ? `Edit: ${product.name}` : product.name} createUrl={null} />
 
       <form onSubmit={handleFormSubmit} className="mt-6 space-y-6">
         <div className="p-6 sm:p-8 bg-white dark:bg-gray-900 rounded-xl shadow-lg">
@@ -208,17 +251,61 @@ export default function SingleProductPage({ params: paramsProp }: SingleProductP
             <button
               type="button"
               onClick={() => {
-                setIsEditing(!isEditing);
-                if (isEditing && product) { 
-                  setFormData({
-                    name: product.name,
-                    category: product.category,
-                    price: product.price,
-                    stock: product.stock,
-                    status: product.status,
-                    description: product.description,
-                    image: product.image,
-                    rating: product.rating,
+                const newState = !isEditing;
+                setIsEditing(newState);
+                // Reset formData to current product data when entering or cancelling edit mode
+                if (newState && product) {
+                    setFormData({
+                      sku: product.sku,
+                      image: product.image,
+                      name: product.name,
+                      shortName: product.shortName,
+                      identifier: product.identifier,
+                      productType: product.productType,
+                      brand: product.brand,
+                      category: product.category,
+                      quantity: product.quantity,
+                      stock: product.stock,
+                      mrp: product.mrp,
+                      price: product.price,
+                      businessPrice: product.businessPrice,
+                      manufacturer: product.manufacturer,
+                      hsnCode: product.hsnCode,
+                      ppuCount: product.ppuCount,
+                      unit: product.unit,
+                      tax: product.tax,
+                      manufacturingPartNumber: product.manufacturingPartNumber,
+                      gender: product.gender,
+                      status: product.status,
+                      description: product.description,
+                      rating: product.rating,
+                  });
+                } else if (!newState && product) {
+                     // If cancelling edit, reset formData to current product state
+                      setFormData({
+                      sku: product.sku,
+                      image: product.image,
+                      name: product.name,
+                      shortName: product.shortName,
+                      identifier: product.identifier,
+                      productType: product.productType,
+                      brand: product.brand,
+                      category: product.category,
+                      quantity: product.quantity,
+                      stock: product.stock,
+                      mrp: product.mrp,
+                      price: product.price,
+                      businessPrice: product.businessPrice,
+                      manufacturer: product.manufacturer,
+                      hsnCode: product.hsnCode,
+                      ppuCount: product.ppuCount,
+                      unit: product.unit,
+                      tax: product.tax,
+                      manufacturingPartNumber: product.manufacturingPartNumber,
+                      gender: product.gender,
+                      status: product.status,
+                      description: product.description,
+                      rating: product.rating,
                   });
                 }
               }}
@@ -256,18 +343,81 @@ export default function SingleProductPage({ params: paramsProp }: SingleProductP
               </div>
 
               <div>
+                <label htmlFor="shortName" className={labelClass}>Short Name</label>
+                {isEditing ? (
+                  <input type="text" name="shortName" id="shortName" value={formData.shortName || ''} onChange={handleInputChange} className={inputClass} />
+                ) : ( <p className="text-gray-700 dark:text-gray-200 py-2.5">{product.shortName || 'N/A'}</p> )}
+              </div>
+
+              <div>
+                 <label htmlFor="sku" className={labelClass}>SKU</label>
+                 {isEditing ? (
+                   <input type="text" name="sku" id="sku" value={formData.sku || ''} onChange={handleInputChange} className={inputClass} required />
+                 ) : ( <p className="text-gray-700 dark:text-gray-200 py-2.5">{product.sku}</p> )}
+              </div>
+
+              <div>
+                 <label htmlFor="identifier" className={labelClass}>Identifier (e.g., EAN number)</label>
+                 {isEditing ? (
+                   <input type="text" name="identifier" id="identifier" value={formData.identifier || ''} onChange={handleInputChange} className={inputClass} />
+                 ) : ( <p className="text-gray-700 dark:text-gray-200 py-2.5">{product.identifier || 'N/A'}</p> )}
+              </div>
+
+              <div>
+                <label htmlFor="productType" className={labelClass}>Product Type</label>
+                 {isEditing ? (
+                   <input type="text" name="productType" id="productType" value={formData.productType || ''} onChange={handleInputChange} className={inputClass} />
+                 ) : ( <p className="text-gray-700 dark:text-gray-200 py-2.5">{product.productType || 'N/A'}</p> )}
+              </div>
+
+               <div>
+                 <label htmlFor="brand" className={labelClass}>Brand</label>
+                 {isEditing ? (
+                   <input type="text" name="brand" id="brand" value={formData.brand || ''} onChange={handleInputChange} className={inputClass} />
+                 ) : ( <p className="text-gray-700 dark:text-gray-200 py-2.5">{product.brand || 'N/A'}</p> )}
+               </div>
+
+              <div>
                 <label htmlFor="category" className={labelClass}>Category</label>
                 {isEditing ? (
-                  <input type="text" name="category" id="category" value={formData.category || ''} onChange={handleInputChange} className={inputClass} />
+                  <input type="text" name="category" id="category" value={formData.category || ''} onChange={handleInputChange} className={inputClass} required />
                 ) : ( <p className="text-gray-700 dark:text-gray-200 py-2.5">{product.category}</p> )}
               </div>
 
+               <div>
+                 <label htmlFor="manufacturer" className={labelClass}>Manufacturer</label>
+                 {isEditing ? (
+                   <input type="text" name="manufacturer" id="manufacturer" value={formData.manufacturer || ''} onChange={handleInputChange} className={inputClass} />
+                 ) : ( <p className="text-gray-700 dark:text-gray-200 py-2.5">{product.manufacturer || 'N/A'}</p> )}
+               </div>
+
+                <div>
+                  <label htmlFor="hsnCode" className={labelClass}>HSN Code</label>
+                  {isEditing ? (
+                    <input type="text" name="hsnCode" id="hsnCode" value={formData.hsnCode || ''} onChange={handleInputChange} className={inputClass} />
+                  ) : ( <p className="text-gray-700 dark:text-gray-200 py-2.5">{product.hsnCode || 'N/A'}</p> )}
+                </div>
+
+                 <div>
+                   <label htmlFor="manufacturingPartNumber" className={labelClass}>Manufacturing Part Number</label>
+                   {isEditing ? (
+                     <input type="text" name="manufacturingPartNumber" id="manufacturingPartNumber" value={formData.manufacturingPartNumber || ''} onChange={handleInputChange} className={inputClass} />
+                   ) : ( <p className="text-gray-700 dark:text-gray-200 py-2.5">{product.manufacturingPartNumber || 'N/A'}</p> )}
+                 </div>
+
+                  <div>
+                    <label htmlFor="gender" className={labelClass}>Gender</label>
+                    {isEditing ? (
+                      <input type="text" name="gender" id="gender" value={formData.gender || ''} onChange={handleInputChange} className={inputClass} />
+                    ) : ( <p className="text-gray-700 dark:text-gray-200 py-2.5">{product.gender || 'N/A'}</p> )}
+                  </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <label htmlFor="price" className={labelClass}>Price</label>
+                  <label htmlFor="quantity" className={labelClass}>Quantity</label>
                   {isEditing ? (
-                    <input type="text" name="price" id="price" value={formData.price || ''} onChange={handleInputChange} placeholder="$0.00" className={inputClass} />
-                  ) : ( <p className="text-gray-700 dark:text-gray-200 py-2.5">{product.price}</p> )}
+                    <input type="number" name="quantity" id="quantity" value={formData.quantity === undefined ? '' : formData.quantity} onChange={handleInputChange} className={inputClass} min="0" />
+                  ) : ( <p className="text-gray-700 dark:text-gray-200 py-2.5">{product.quantity} units</p> )}
                 </div>
                 <div>
                   <label htmlFor="stock" className={labelClass}>Stock Quantity</label>
@@ -276,7 +426,57 @@ export default function SingleProductPage({ params: paramsProp }: SingleProductP
                   ) : ( <p className="text-gray-700 dark:text-gray-200 py-2.5">{product.stock} units</p> )}
                 </div>
               </div>
-              
+
+               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                 <div>
+                   <label htmlFor="ppuCount" className={labelClass}>PPU Count</label>
+                   {isEditing ? (
+                     <input type="number" name="ppuCount" id="ppuCount" value={formData.ppuCount === undefined ? '' : formData.ppuCount} onChange={handleInputChange} className={inputClass} min="0" />
+                   ) : ( <p className="text-gray-700 dark:text-gray-200 py-2.5">{product.ppuCount || 'N/A'}</p> )}
+                 </div>
+
+                  <div>
+                    <label htmlFor="unit" className={labelClass}>Unit (e.g., ml, pcs)</label>
+                    {isEditing ? (
+                      <input type="text" name="unit" id="unit" value={formData.unit || ''} onChange={handleInputChange} className={inputClass} />
+                    ) : ( <p className="text-gray-700 dark:text-gray-200 py-2.5">{product.unit || 'N/A'}</p> )}
+                  </div>
+               </div>
+
+
+               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                 <div>
+                   <label htmlFor="mrp" className={labelClass}>MRP</label>
+                   {isEditing ? (
+                     <input type="text" name="mrp" id="mrp" value={formData.mrp || ''} onChange={handleInputChange} className={inputClass} />
+                   ) : ( <p className="text-gray-700 dark:text-gray-200 py-2.5">{product.mrp || 'N/A'}</p> )}
+                 </div>
+
+                 <div>
+                   <label htmlFor="price" className={labelClass}>Selling Price</label>
+                   {isEditing ? (
+                     <input type="text" name="price" id="price" value={formData.price || ''} onChange={handleInputChange} placeholder="$0.00" className={inputClass} required />
+                   ) : ( <p className="text-gray-700 dark:text-gray-200 py-2.5">{product.price}</p> )}
+                 </div>
+               </div>
+
+               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                 <div>
+                   <label htmlFor="businessPrice" className={labelClass}>Business Price</label>
+                   {isEditing ? (
+                     <input type="text" name="businessPrice" id="businessPrice" value={formData.businessPrice || ''} onChange={handleInputChange} className={inputClass} />
+                   ) : ( <p className="text-gray-700 dark:text-gray-200 py-2.5">{product.businessPrice || 'N/A'}</p> )}
+                 </div>
+
+                  <div>
+                     <label htmlFor="tax" className={labelClass}>Tax (%)</label>
+                     {isEditing ? (
+                       <input type="text" name="tax" id="tax" value={formData.tax || ''} onChange={handleInputChange} className={inputClass} />
+                     ) : ( <p className="text-gray-700 dark:text-gray-200 py-2.5">{product.tax || 'N/A'}</p> )}
+                  </div>
+               </div>
+
+
                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                     <label htmlFor="status" className={labelClass}>Status</label>
@@ -304,6 +504,7 @@ export default function SingleProductPage({ params: paramsProp }: SingleProductP
                     ) : ( <p className="text-gray-700 dark:text-gray-200 py-2.5">{product.rating ? `${product.rating} ★` : 'N/A'}</p> )}
                 </div>
               </div>
+
 
               <div>
                 <label htmlFor="description" className={labelClass}>Description</label>

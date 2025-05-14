@@ -58,7 +58,7 @@ export default function OrdersPage() {
 
   return (
     <>
-      <PageBreadcrumb pageTitle="Customer Orders" />
+      <PageBreadcrumb pageTitle="Customer Orders" createUrl='/orders/create' />
 
       <div className="mt-6 overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-gray-900">
         <div className="max-w-full overflow-x-auto">

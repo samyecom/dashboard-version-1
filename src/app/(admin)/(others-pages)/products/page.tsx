@@ -12,6 +12,7 @@ import {
 import Badge from "@/components/ui/badge/Badge";
 import { mockProducts } from "@/types/products";
 import Link from "next/link";
+
 export const metadata: Metadata = {
     title: "Next.js Products | TailAdmin - Next.js Dashboard Template",
   description:
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
 export default function ProductsPage() {
     return (
         <>
-            <PageBreadcrumb pageTitle="Products List" />
+            <PageBreadcrumb pageTitle="Products List" createUrl='/products/create' />
 
             <div className="mt-6 overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]">
                 <div className="max-w-full overflow-x-auto">

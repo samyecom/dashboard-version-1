@@ -101,7 +101,7 @@ export default function CreateOrderPage() {
 
   return (
     <>
-      <PageBreadcrumb pageTitle="Create New Order" />
+      <PageBreadcrumb pageTitle="Create New Order" createUrl={null} />
 
       <div className="mt-6">
         <form onSubmit={handleSubmit} className="space-y-8">
