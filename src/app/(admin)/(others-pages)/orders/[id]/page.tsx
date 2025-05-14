@@ -75,7 +75,7 @@ interface PageParams {
 }
 
 type EditOrderPageProps = {
-  params: PageParams | Promise<PageParams>;
+  params: Promise<PageParams> | undefined;
 };
 
 export default function EditOrderPage({ params }: EditOrderPageProps) {
