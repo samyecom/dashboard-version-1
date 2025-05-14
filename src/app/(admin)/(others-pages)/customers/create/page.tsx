@@ -19,11 +19,12 @@ export default function CreateCustomerPage() {
     tags: ""
   });
 
-  const handleInputChange = (e: { target: { id: any; value: any; type: any; checked: any; }; }) => {
-    const { id, value, type, checked } = e.target;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { id, value, type } = e.target;
+    
     setCustomerData(prevState => ({
       ...prevState,
-      [id]: type === 'checkbox' ? checked : value,
+      [id]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
     }));
   };
 
@@ -94,7 +95,7 @@ export default function CreateCustomerPage() {
                     <select
                       id="language"
                       value={customerData.language}
-                      onChange={(e) => handleInputChange(e.target)}
+                      onChange={(e) => handleInputChange(e)}
                       className="w-full appearance-none border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     >
                       <option value="English [Default]">English [Default]</option>
