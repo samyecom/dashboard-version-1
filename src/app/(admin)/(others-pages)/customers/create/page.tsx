@@ -263,7 +263,7 @@ export default function CreateCustomerPage() {
                   </button>
                 </div>
                 <p className="text-sm text-gray-500">
-                  Notes are private and won't be shared with the customer.
+                  Notes are private and will not be shared with the customer.
                 </p>
                 <textarea
                   id="notes"

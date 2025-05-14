@@ -106,7 +106,7 @@ export default function CustomerDetailsPage({ params }: CustomerDetailsPageProps
     ];
 
     // Filter mock orders by customerId
-    const recentOrders: Order[] = mockOrders.filter(order => (order as any).customerId === customerId); // Note: Added (order as any).customerId for placeholder filtering
+    const recentOrders: Order[] = mockOrders.filter(order => order.customerId === customerId);
 
 
     if (!customer || customer.name === "Loading Customer...") {
