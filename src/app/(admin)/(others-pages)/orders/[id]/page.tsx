@@ -79,10 +79,10 @@ type EditOrderPageProps = {
 };
 
 export default function EditOrderPage({ params }: EditOrderPageProps) {
-  const resolvedParams: PageParams =
+  const resolvedParams: PageParams | undefined =
     typeof (params as Promise<PageParams>)?.then === 'function'
       ? use(params as Promise<PageParams>)
-      : (params as PageParams);
+      : undefined;
 
   const { id } = resolvedParams || {};
   const [order, setOrder] = useState<Order | null>(null);
