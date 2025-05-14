@@ -70,7 +70,7 @@ interface CustomerDetailsPageProps {
     params: {
         id: string; // The customer ID from the URL
     };
-    // Add searchParams as it's part of the standard PageProps type
+    // searchParams are also part of the standard PageProps type
     searchParams: { [key: string]: string | string[] | undefined };
 }
 
